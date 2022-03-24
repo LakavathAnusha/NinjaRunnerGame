@@ -5,49 +5,47 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     // Start is called before the first frame update
-    public int playerJumpForce;
-    float inputX, inputY;
-    public int playerSpeed;
+    Animator animator;
     Rigidbody2D rb;
-    Animator anim;
     SpriteRenderer render;
+    public float playerJumpForce;
+    public float playerSpeed;
+    float inputX;
     void Start()
     {
-      rb=GetComponent<Rigidbody2D>();
-        render=GetComponent<SpriteRenderer>();
-        anim=GetComponent<Animator>();
+        rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+        render = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        anim.SetTrigger("isIdle");
-        if (Input.GetKeyUp(KeyCode.Space))
+        animator.SetTrigger("Idle");
+        if (Input.GetKeyDown(KeyCode.Space))     // TO Jump
         {
-            anim.SetTrigger("isJumping");
+            animator.SetTrigger("IsJumping");
             rb.AddForce(Vector2.up * playerJumpForce);
         }
-        if (Input.GetKeyUp(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            anim.SetTrigger("isAttacking");
+            animator.SetTrigger("IsAttacking");
         }
-        if (Input.GetKeyUp(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
-            anim.SetTrigger("isSliding");
+            animator.SetTrigger("IsSliding");
         }
-            inputX = Input.GetAxis("Horizontal");
-       rb.velocity=new Vector2 (inputX*playerSpeed*Time.deltaTime,rb.velocity.y);
-        if(inputX>0||inputX<0)
-        {
-            anim.SetTrigger("isRunning");
-        }
-        if(inputX>0)
-        {
+        inputX = Input.GetAxis("Horizontal");
+        rb.velocity = new Vector2(inputX * playerSpeed, rb.velocity.y);
+        if (inputX > 0 || inputX < 0)
+            animator.SetTrigger("IsRunning");
+        if (inputX > 0)
             render.flipX = false;
-        }
-        if(inputX<0)
-        {
-            render.flipX=true;
-        }
+        else if (inputX < 0)
+            render.flipX = true;
+
+        //Need to do running part
     }
+
+
 }
